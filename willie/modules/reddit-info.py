@@ -49,7 +49,10 @@ def rpost_info(bot, trigger, match=None):
     message = (message + ' | ' + str(s.ups - s.downs) + ' points (03'
                + str(s.ups) + '|05' + str(s.downs) + ') | ' +
                str(s.num_comments) + ' comments | Posted by ' + author)
-    #TODO add creation time with s.created
+
+    # age
+    message = message + ' ' + human(datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(int(s.created_utc)))
+
     bot.say(message)
 
 
