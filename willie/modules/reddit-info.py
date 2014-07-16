@@ -12,6 +12,8 @@ from willie.module import commands, rule, example, NOLIMIT
 from willie import tools
 import praw
 import re
+import datetime
+from ago import human
 domain = r'https?://(?:www\.|np\.)?reddit\.com'
 post_url = '(%s/r/.*?/comments/[\w-]+)' % domain
 user_url = '%s/u(ser)?/([\w-]+)' % domain
@@ -77,7 +79,9 @@ def redditor_info(bot, trigger, match=None):
         message = message + ' | 05Mod'
     message = message + ' | Link: ' + str(u.link_karma) + ' | Comment: ' + str(u.comment_karma)
 
-    #TODO detect cake day with u.created
+    # age
+    message = message + ' | Reddit for ' + human(datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(int(u.created_utc))).replace(' ago', '')
+
     bot.say(message)
 
 
