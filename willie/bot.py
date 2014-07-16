@@ -28,6 +28,7 @@ from willie.db import WillieDB
 from willie.tools import (stderr, Nick, PriorityQueue, released,
                    get_command_regexp, iteritems, itervalues)
 import willie.module as module
+import json
 if sys.version_info.major >= 3:
     unicode = str
     basestring = str
@@ -97,6 +98,11 @@ class Willie(irc.Bot):
         A thread-safe dict for storage of runtime data to be shared between
         modules. See `WillieMemory <#tools.Willie.WillieMemory>`_
         """
+        if os.path.isfile('willie.json'):
+            with open('willie.json', 'r') as f:
+                saved = json.load(f)
+            for k,v in saved.items():
+                self.memory[k] = v
 
         self.scheduler = Willie.JobScheduler(self)
         self.scheduler.start()

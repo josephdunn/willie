@@ -42,6 +42,7 @@ if has_ssl:
 import errno
 import threading
 from datetime import datetime
+import json
 if sys.version_info.major >= 3:
     unicode = str
 
@@ -242,6 +243,9 @@ class Bot(asynchat.async_chat):
 
     def quit(self, message):
         """Disconnect from IRC and close the bot."""
+        d = dict((k,self.memory[k]) for k in [ 'preferred_versions', 'sayings', 'sayings_votes_forget', 'heretics' ] if k in self.memory.keys())
+        with open('willie.json', 'w') as f:
+            json.dump(d, f)
         self.write(['QUIT'], message)
         self.hasquit = True
         # Wait for acknowledgement from the server. By RFC 2812 it should be
