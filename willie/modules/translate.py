@@ -111,6 +111,8 @@ def tr(bot, trigger):
 @example('.tr mon chien', '"my dog" (fr to en, translate.google.com)')
 def tr2(bot, trigger):
     """Translates a phrase, with an optional language hint."""
+    if not trigger.group(2):
+        return bot.reply('phrase required')
     command = trigger.group(2)
 
     def langcode(p):
