@@ -83,7 +83,7 @@ def redditor_info(bot, trigger, match=None):
     message = message + ' | Link: ' + str(u.link_karma) + ' | Comment: ' + str(u.comment_karma)
 
     # age
-    message = message + ' | Redditor for ' + human(datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(int(u.created_utc))).replace(' ago', '')
+    message = message + ' | Redditor for ' + human(datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(int(u.created_utc)), past_tense='{}')
 
     bot.say(message)
 
