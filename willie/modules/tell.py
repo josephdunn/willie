@@ -79,8 +79,8 @@ def setup(self):
     self.memory['reminders'] = loadReminders(self.tell_filename, self.memory['tell_lock'])
 
 
-@commands('tell', 'ask')
-@nickname_commands('tell', 'ask')
+@commands('tell', 'ask', 'tellpm')
+@nickname_commands('tell', 'ask', 'tellpm')
 @example('Willie, tell Embolalia he broke something again.')
 def f_remind(bot, trigger):
     """Give someone a message the next time they're seen"""
@@ -141,8 +141,7 @@ def getReminders(bot, channel, key, tellee):
         for (teller, verb, datetime, msg) in bot.memory['reminders'][key]:
             if datetime.startswith(today):
                 datetime = datetime[len(today) + 1:]
-            lines.append(template % (tellee, datetime, teller, verb, tellee, msg))
-
+            lines.append((template % (tellee, datetime, teller, verb, tellee, msg), verb == 'tellpm'))
         try:
             del bot.memory['reminders'][key]
         except KeyError:
@@ -155,7 +154,6 @@ def getReminders(bot, channel, key, tellee):
 @rule('(.*)')
 @priority('low')
 def message(bot, trigger):
-
     tellee = trigger.nick
     channel = trigger.sender
 
@@ -173,12 +171,16 @@ def message(bot, trigger):
             reminders.extend(getReminders(bot, channel, remkey, tellee))
 
     for line in reminders[:maximum]:
-        bot.say(line)
+        if line[1]:
+            # private message reminder
+            bot.msg(tellee, line[0])
+        else:
+            bot.say(line[0])
 
     if reminders[maximum:]:
         bot.say('Further messages sent privately')
         for line in reminders[maximum:]:
-            bot.msg(tellee, line)
+            bot.msg(tellee, line[0])
 
     if len(bot.memory['reminders'].keys()) != remkeys:
         dumpReminders(bot.tell_filename, bot.memory['reminders'], bot.memory['tell_lock'])  # @@ tell
