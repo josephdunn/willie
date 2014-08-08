@@ -78,9 +78,13 @@ def setup(self):
     self.memory['tell_lock'] = threading.Lock()
     self.memory['reminders'] = loadReminders(self.tell_filename, self.memory['tell_lock'])
 
+@commands('tellpm')
+@example('.tellpm mstark I have a secret message for you: SETEC ASTRONOMY.')
+def tellpm(bot, trigger):
+    f_remind(bot, trigger)
 
-@commands('tell', 'ask', 'tellpm')
-@nickname_commands('tell', 'ask', 'tellpm')
+@commands('tell', 'ask')
+@nickname_commands('tell', 'ask')
 @example('Willie, tell Embolalia he broke something again.')
 def f_remind(bot, trigger):
     """Give someone a message the next time they're seen"""
