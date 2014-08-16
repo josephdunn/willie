@@ -464,7 +464,7 @@ class Willie(irc.Bot):
             def trim_docstring(doc):
                 """Clean up a docstring"""
                 if not doc:
-                    return ''
+                    return []
                 lines = doc.expandtabs().splitlines()
                 indent = sys.maxsize
                 for line in lines[1:]:
@@ -479,7 +479,7 @@ class Willie(irc.Bot):
                     trimmed.pop()
                 while trimmed and not trimmed[0]:
                     trimmed.pop(0)
-                return '\n'.join(trimmed)
+                return trimmed
             doc = trim_docstring(func.__doc__)
 
             if hasattr(func, 'commands') and func.commands[0]:
