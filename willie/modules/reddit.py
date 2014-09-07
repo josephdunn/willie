@@ -10,6 +10,7 @@ from __future__ import unicode_literals
 
 from willie.module import commands, rule, example, NOLIMIT
 from willie.formatting import bold, color, colors
+from willie.web import USER_AGENT
 from willie import tools
 import praw
 import re
@@ -36,7 +37,7 @@ def shutdown(bot):
 
 @rule('.*%s.*' % post_url)
 def rpost_info(bot, trigger, match=None):
-    r = praw.Reddit(user_agent='Willie IRC bot - see dft.ba/-williesource for more')
+    r = praw.Reddit(user_agent=USER_AGENT)
     match = match or trigger
     s = r.get_submission(url=match.group(1))
 
@@ -79,7 +80,7 @@ def rpost_info(bot, trigger, match=None):
 def redditor_info(bot, trigger, match=None):
     """Show information about the given Redditor"""
     commanded = re.match(bot.config.prefix + 'redditor', trigger)
-    r = praw.Reddit(user_agent='phenny / willie IRC bot - see dft.ba/-williesource for more')
+    r = praw.Reddit(user_agent=USER_AGENT)
     match = match or trigger
     try:
         u = r.get_redditor(match.group(2))
