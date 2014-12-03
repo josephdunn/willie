@@ -115,7 +115,7 @@ def kick(bot, trigger):
         reasonidx = 3
     reason = ' '.join(text[reasonidx:])
     if nick != bot.config.nick:
-        bot.write(['KICK', channel, nick, reason])
+        bot.write(['KICK', channel, nick], reason)
 
 
 def configureHostMask(mask):
